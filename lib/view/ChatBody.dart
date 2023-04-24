@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatBody extends StatefulWidget {
   const ChatBody({super.key});
@@ -33,10 +33,39 @@ class ChatBodyState extends State<ChatBody> {
               .map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                return ListTile(
-                  title: SelectableText(data['nickName']),
-                  subtitle: SelectableText(data['message']),
+                return Card(
+                  shadowColor: Colors.white54,
+                  margin: const EdgeInsets.all(1.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(children: [
+                        Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Text(
+                              data['nickName'],
+                              style: TextStyle(fontSize: 15),
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Text(data['name'])),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 0.0),
+                            child: Text(DateFormat('yyyy/MM/dd kk:mm:ss')
+                                .format(data['createAt'].toDate())
+                                .toString())),
+                      ]),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(data['message'], textAlign: TextAlign.left),
+                      )
+                    ],
+                  ),
                 );
+                // ListTile(
+                //   title: SelectableText(data['nickName']),
+                //   subtitle: SelectableText(data['message']),
+                // );
               })
               .toList()
               .cast(),
